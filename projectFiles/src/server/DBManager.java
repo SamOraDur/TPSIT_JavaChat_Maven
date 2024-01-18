@@ -148,7 +148,7 @@ public class DBManager {
         //metodo per raccogliere dati (messaggi) dal database
 
         public synchronized NodeList GetDSInfo(String usr_a,String usr_b){
-            NodeList chatMsg = null;
+            MyNodeList chatMsg = new MyNodeList();  //FINE CAMBIO PROGETTO RINIZIARE DA QUI PER CHANGE DATABASE
             //uso il metodo per ritrovare l'elemento chat
             Element chat = GetChatFromDB(usr_a,usr_b);
             //uso quell'elemento per ricavare la NodeList dei messaggi

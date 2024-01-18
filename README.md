@@ -1,4 +1,6 @@
 
+# DA MODIFICARE, NON COMPLETO
+
 ![Logo](https://github.com/SamOraDur/TPSIT_ChatSocket/blob/main/projectFiles/src/png/logo/logo.jpeg)
 
 # 💬 Ketu

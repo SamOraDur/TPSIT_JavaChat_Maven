@@ -30,4 +30,7 @@ public class MyNodeList implements NodeList{
         return list.size();
     }
     
+    public void add(Element e){
+        list.add(e);
+    }
 }
