@@ -75,7 +75,7 @@ public class LoggedIndex extends javax.swing.JFrame {
         initComponents();
 
         //componenti grafiche
-        centrareJFrame();
+        //centrareJFrame();
         setIconaImage();
         titleBar1.init(this);
         messaggio_field.setEditable(false);
@@ -133,6 +133,7 @@ public class LoggedIndex extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(18, 18, 18));
         jPanel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 500));
 
         titleBar1.setBackground(new java.awt.Color(18, 18, 18));
 
@@ -190,6 +191,7 @@ public class LoggedIndex extends javax.swing.JFrame {
         });
 
         userList.setBackground(new java.awt.Color(43, 43, 43));
+        userList.setPreferredSize(new java.awt.Dimension(311, 300));
 
         javax.swing.GroupLayout userListLayout = new javax.swing.GroupLayout(userList);
         userList.setLayout(userListLayout);
@@ -199,7 +201,7 @@ public class LoggedIndex extends javax.swing.JFrame {
         );
         userListLayout.setVerticalGroup(
             userListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         scrollPane.setViewportView(userList);
@@ -209,6 +211,7 @@ public class LoggedIndex extends javax.swing.JFrame {
         scrollPaneWin111.setBackground(new java.awt.Color(43, 43, 43));
 
         chat.setBackground(new java.awt.Color(43, 43, 43));
+        chat.setPreferredSize(new java.awt.Dimension(648, 500));
 
         javax.swing.GroupLayout chatLayout = new javax.swing.GroupLayout(chat);
         chat.setLayout(chatLayout);
@@ -218,7 +221,7 @@ public class LoggedIndex extends javax.swing.JFrame {
         );
         chatLayout.setVerticalGroup(
             chatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 855, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
 
         scrollPaneWin111.setViewportView(chat);
@@ -246,13 +249,15 @@ public class LoggedIndex extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(messaggio_field)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(invia_icon)
                         .addGap(12, 12, 12))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(allChat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(23, Short.MAX_VALUE))))
+                        .addContainerGap(23, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(messaggio_field)
+                        .addContainerGap())))
             .addComponent(titleBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
@@ -267,22 +272,22 @@ public class LoggedIndex extends javax.swing.JFrame {
                         .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(allChat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(messaggio_field, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(messaggio_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(invia_icon, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(invia_icon)))
+                .addGap(353, 353, 353))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1033, Short.MAX_VALUE)
         );
 
         pack();
@@ -364,8 +369,8 @@ public class LoggedIndex extends javax.swing.JFrame {
         Dimension dimensioneSchermo = Toolkit.getDefaultToolkit().getScreenSize();
 
         // Calcola le coordinate per centrare il JFrame
-        int x = (dimensioneSchermo.width - getWidth()) / 2;
-        int y = (dimensioneSchermo.height - getHeight()) / 2;
+        int x = (dimensioneSchermo.width - getWidth()) / 4;
+        int y = (dimensioneSchermo.height - getHeight()) / 4;
 
         // Imposta la posizione del JFrame
         setLocation(x, y);

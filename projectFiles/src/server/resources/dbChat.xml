@@ -14,6 +14,9 @@
         <user username="Mar">
             <password>4</password>
         </user>
+        <user username="ldorato">
+            <password>password</password>
+        </user>
     </UserList>
     <ChatList>
         <chat id="Rob-Sam">
@@ -177,6 +180,16 @@
                 <Sender>Rob</Sender>
                 <Receiver>Sam</Receiver>
             </ChatMessage>
+            <ChatMessage>
+                <Content>ciao</Content>
+                <Sender>Sam</Sender>
+                <Receiver>Rob</Receiver>
+            </ChatMessage>
+            <ChatMessage>
+                <Content>ciao</Content>
+                <Sender>Sam</Sender>
+                <Receiver>Rob</Receiver>
+            </ChatMessage>
         </chat>
         <chat id="Mat-Sam">
             <ChatMessage>
@@ -210,6 +223,18 @@
                 <Content>TestScrollBarHoSonno</Content>
                 <Sender>Sam</Sender>
                 <Receiver>Mar</Receiver>
+            </ChatMessage>
+        </chat>
+        <chat id="Sam-ldorato">
+            <ChatMessage>
+                <Content>benvenuto</Content>
+                <Sender>Sam</Sender>
+                <Receiver>ldorato</Receiver>
+            </ChatMessage>
+            <ChatMessage>
+                <Content>jhgj</Content>
+                <Sender>Sam</Sender>
+                <Receiver>ldorato</Receiver>
             </ChatMessage>
         </chat>
     </ChatList>

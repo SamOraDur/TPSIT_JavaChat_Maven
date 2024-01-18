@@ -3,7 +3,7 @@ package server;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
-
+import java.sql.Connection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,7 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import java.sql.*;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
 public class DBManager {
     
     //inizializzazione variabili 
-    private static Document db;
+    private static Document doc;
     
     //TBE
     private final int UserNotFound = 0;
@@ -38,11 +38,10 @@ public class DBManager {
     
     private final int UserDuplicated = 0;
     private final int SignUpChecked = 1;
-
-    protected static final String XML_FILE_PATH = "src\\server\\resources\\dbChat.xml";
-    protected static final String DTD_FILE_PATH = "dbChat.dtd";
+    
     private DocumentBuilder builder;
-    private File XMLFile;
+    Connection conn;
+
 
      // costruttore
     public DBManager(){
@@ -50,11 +49,17 @@ public class DBManager {
     
         try{
             builder = factory.newDocumentBuilder();
-            XMLFile = new File(XML_FILE_PATH);
-
-            db = builder.parse(XMLFile);
+            doc = builder.newDocument();
             
-            removeWhitespaces(db.getDocumentElement());
+            String driver ="com.mysql.jdbc.Driver";
+            Class.forName(driver);
+            
+            String url ="jdbc:mysql1://localhost:3306/chatdb";
+            String user = "root";
+            String psw = "";
+            conn =  DriverManager.getConnection(url,user,psw);
+               
+            
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -63,51 +68,44 @@ public class DBManager {
     //metodo checkuser 
     public synchronized int CheckUser(String usr, String psw){
         int result = UserNotFound;
-        Node usersNode = db.getElementById(usr);
-        
-        //controllo se il nodo esiste (result rimane come utente non trovato). Se esiste controllo se la password è uguale
-        if(usersNode!=null){
-            if(usersNode.getFirstChild().getTextContent().equals(psw)){
-                result = PasswordChecked; 
-                //result diventa utente trovato e verificato
-            }else{
-                result = WrongPassword;
-                //result diventa utente trovato ma non verificato
+       
+        try 
+        {
+            String query="SELECT NickName FROM users WHERE NickName='"+usr+"' AND PASSWORD= '"+psw+"';";
+            ResultSet res = conn.createStatement().executeQuery(query);
+            if(res.next()){
+                result = PasswordChecked;
             }
+            else
+            {
+                result = WrongPassword;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
+        
+       
         return result;
     }
 
     //metodo addUserToDB 
     public synchronized int addUserToDB(String usr,String psw){
         int result = UserDuplicated;
-
-        Node userNode = db.getElementById(usr);
-
-        NodeList usersList = db.getElementsByTagName("UserList");
-
-        //controllo se il nodo esiste. Se esiste controllo l'utente esiste già
-        if(userNode==null){
-            Element userList = (Element)usersList.item(0);
-            
-            Element user = db.createElement("user");
-                    user.setAttribute("username",usr);
-            Element password = db.createElement("password");
-                    password.setTextContent(psw);
-                    user.appendChild(password);
-                    userList.appendChild(user);
-                    
-                    user.setIdAttribute("username", true);
-
-                    try {
-                        saveXmlDocument(db,XML_FILE_PATH);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-            result=SignUpChecked;
+        
+        try
+        {
+            String inserInto= "INSERT INTO  utenti (NickName,password) VALUES ('"+usr+"','"+psw+"')";
+            //ritorna 0 no 1 si
+            int res = conn.createStatement().executeUpdate(inserInto);
+            if(res>=1)
+            {
+                result = SignUpChecked;
+            }
+        }catch(Exception e)
+        {
+            e.printStackTrace();
         }
-
+       
         return result;
     }
 
@@ -120,37 +118,29 @@ public class DBManager {
             //estrapolazione di sender e receiver dal pacchetto messagio
             String send = msg.getElementsByTagName("Sender").item(0).getTextContent();
             String receive = msg.getElementsByTagName("Receiver").item(0).getTextContent();
-
             
-            //creazione di un elemento chat con tutti i messaggi della chat tra i due usr e un nodo con il messaggio da aggiungere
-            Element chat = db.getElementById(send+"-"+receive);
-            Node newMsg = db.importNode(msg,true);
-
-            //ricerca se la chat esiste o no
-            if(chat != null){
-                chat.appendChild(newMsg);
-            }else{
-                //ricerca se la chat esiste con un nome diverso
-                chat = db.getElementById(receive+"-"+send);
-                if(chat!= null){
-                    chat.appendChild(newMsg);
-                }else{
-                    //se non esiste ne crea una nuova (creo l'elemento chat, metto come attributo id il nome, inserisco dentro il messaggio e la inserisco dentro la lista di chat)
-                    Element chatN = db.createElement("chat");
-                    chatN.setAttribute("id",send+"-"+receive);
-                    chatN.appendChild(newMsg);
-                    Element chatListN = (Element)db.getChildNodes().item(1).getChildNodes().item(1);
-                    chatListN.appendChild(chatN);
+            String query = "SELECT id_chat FROM chat WHERE (user1='"+send+"' AND user2='"+receive+"') OR (user1='"+receive+"' AND user2='"+send+"')";
+            
+            ResultSet res= conn.createStatement().executeQuery(query);
+            if(!res.next())
+            {
+                String InsertInto = "INSERT INTO chat (id_chat,user1,user2) VALUES (NULL, '"+send+"','"+receive+"')";
+                int resInsert = conn.createStatement().executeUpdate(InsertInto);
+                if(resInsert == 0){
+                    throw new Exception("Inserimento non riuscito");
                 }
+                res = conn.createStatement().executeQuery(query);
+                res.next();
             }
-            saveXmlDocument(db, XML_FILE_PATH);
             
+            String insert = "INSERT INTO messaggio(id_chat,id_messaggio,receiver,sender,testo) VALUES ("+res.getInt("id_chat")+",NULL,'"+send+"','"+receive+"','"+msg.getElementsByTagName("Content").item(0).getTextContent()+"')";
+            conn.createStatement().executeUpdate(insert);
 
             //operazioni svolte con successo
             result = true;
 
-        } catch (Throwable t) {
-            t.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return result;
